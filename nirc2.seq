@@ -1,0 +1,189 @@
+/* -*- C -*- */
+/** ---------------------------------------------------------------------------
+ * @file     nirc2
+ * @brief    sequence file for Aladdin imager
+ * @author   Timothee Greffe
+ * @date     2021-06-03 Initial creation
+ * @modified 
+ *
+ */
+
+/** ---------------------------------------------------------------------------
+ * parameter definitions
+ * syntax: param paramname=value
+*/
+
+param Start=0
+param Expose=0
+param exptime=0
+param mode_UTR=1
+param mode_MCDS=0
+param MCDS_sample=1
+param SkippedRowsQuad=0
+param nRowsQuad=128
+param SkippedColumnsQuad=0
+param nPixelsPair=32
+param longexposure=0
+param abort=0
+param prv_reset_flag=0
+param prv_idle=0
+param permanent_reset=0
+param rollingreset=1
+
+/** ---------------------------------------------------------------------------
+ * @fn     SetupAladdin
+ * @brief  This executes on start-up and sets levels to initialize ROIC array.
+ *
+ */
+SEQUENCE PowerUp {
+ClocksToZero();
+if Start SetupAladdin();
+GOTO PowerUp();
+}
+
+SEQUENCE SetupAladdin {
+GOTO WaitForExpose();
+}
+
+/** ---------------------------------------------------------------------------
+ * @fn	    WaitForExposure
+ * @brief   Here we idle until the host asks for an image
+ */
+
+SEQUENCE WaitForExpose {
+abort--;
+SetupFrameStart();
+if Expose AcqSequence();
+Reset_PRV_RESET_FLAG(1000); 
+GlobalReset();
+prv_idle++;
+GrabFrame();
+prv_idle--;
+prv_reset_flag--;
+GOTO WaitForExpose();
+}
+
+SEQUENCE AcqSequence {
+if mode_UTR GOTO SequenceUTR();
+if mode_MCDS GOTO SequenceMCDS();
+GOTO WaitForExpose();
+}
+
+SEQUENCE SequenceUTR {
+if Expose GrabFrame();
+if Expose MilliSec(exptime);
+prv_reset_flag++; /* increments the counter after the first image */
+GOTO WaitForExpose();
+}
+
+SEQUENCE SequenceMCDS {
+Increment_ExposeCounter(MCDS_sample);
+GrabFrame(MCDS_sample);
+MilliSec(exptime);
+Increment_ExposeCounter(MCDS_sample);
+GrabFrame(MCDS_sample);
+Expose--;
+Reset_PRV_RESET_FLAG(1000);
+GOTO WaitForExpose();
+}
+
+SEQUENCE GrabFrame {
+Expose--;
+if !prv_idle wFrame();
+if !prv_reset_flag GlobalReset();
+SetupFrameStart();
+FrameStartPulse();
+SkipRow(SkippedRowsQuad);                /* Skips rows per group of 2 by pulsing S2 followed by S1  */
+if permanent_reset wVRstR();
+ReadRowQuad(nRowsQuad);                  /* Reads rows per group of 4. S2 O/E then S1 O/E */
+if permanent_reset wbVRstR();
+prv_reset_flag++;
+return;
+}
+
+SEQUENCE ReadRowQuad {
+/* S2 Odd/Even */
+ConfigureS2();
+if !prv_reset_flag RollingResetPulse();
+ReadRowPair();  /* read two rows */
+/* S1 Odd/Even */
+ConfigureS1();
+if !prv_reset_flag RollingResetPulse();
+ReadRowPair(); /* reads two rows */
+return;
+}
+
+SEQUENCE ReadRowPair {
+if !prv_idle wLine();                                   
+ActivateOddRow();
+InitRowRegister();
+ /*Aparently necessary*/
+SkipColumn(SkippedColumnsQuad);            /*  Skips by group of 4 pixels by pulsing F2 then F1 */
+/*if !idle wPixel();*/
+ReadOddPixel();
+ReadPixelPair(nPixelsPair);                /*  Reads the remaining odd pixels followed by even pixels */
+if !prv_idle wLine();
+ActivateEvenRow();                         /* ***** Read Even Row **** */
+InitRowRegister();
+SkipColumn(SkippedColumnsQuad);            /*  Skips by group of 4 pixels by pulsing F2 then F1 */
+ReadOddPixel();
+ReadPixelPair(nPixelsPair);                /*  Reads the remaining odd pixels followed by even pixels */
+return;
+}
+
+SEQUENCE ReadPixelPair {
+if !prv_idle wPixel();
+ReadEvenPixel();         /* Read Even Pixels with F1 low  */
+if !prv_idle wPixel();
+ReadOddPixel();        /* Read Odd Pixels with F2 low */
+return;
+}
+
+/* * --------------------------------------------------------
+ * Reset specific Sequences
+ * 
+ */
+
+
+SEQUENCE GlobalReset {
+wVRstG();
+wDelay1ms(10);
+wbVRstG();
+wDelay1ms(10);
+return;
+}
+
+/** ----------------------------------------------------------
+ * MISC SEQUENCES
+ *
+ */
+
+SEQUENCE MilliSec {
+  if abort GOTO AbortSequence();
+  wDelay1ms();
+  return;
+}
+SEQUENCE Sec {
+MilliSec(1000);
+return;
+}
+
+SEQUENCE Reset_PRV_RESET_FLAG {
+prv_reset_flag--;
+return;
+}
+
+SEQUENCE Increment_ExposeCounter {
+Expose++;
+return;
+}
+
+SEQUENCE Decrement_ExposeCounter {
+Expose--;
+return;
+}
+
+SEQUENCE AbortSequence {
+Decrement_ExposeCounter(1048000);
+GOTO WaitForExpose();
+}

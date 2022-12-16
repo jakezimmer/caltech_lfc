@@ -1,0 +1,58 @@
+/* -*- C -*- */
+/** ---------------------------------------------------------------------------
+ * @file     nirc2.signals
+ * @brief    NIRC2 signal names and module/channel assignments
+ * @author   Timothee Greffe
+ * @date     2021-06-03 Initial creation from Template provided by Steve Kaye
+ * @modified 
+ * 
+ * syntax:
+ *
+ * #define signallabel slot : channel
+ *
+ * where signallabel   is any ASCII text string to identify the signal name
+ *       slot          is the slot number containing the module,
+ *       channel       is the channel number on the module
+ * 
+ * Combinations of signals can also be made by creating a comma-separated
+ * list enclosed in square brackets as follows:
+ *
+ * #define newlabel [ signallabel, signallabel [, signallabel] ]
+ *
+ * where newlabel    is any ASCII text string to define a new signal
+ *       signallabel is any signal already defined above
+ *
+ * any number can be combined in a comma-separated list between square brackets,
+ * or a single signal can be defined in square brackets to effectively asign
+ * a different name to the signal
+ *
+ */
+
+/* These are the control signals needed to control pixels*/
+/* fire the shutter and get a frame of data */
+#define SHUTTER	0 : 1   /* INT signal from the backplane - is there a shutter?	*/
+#define FRAME	0 : 2   /* FRAME signal from the backplane			*/
+#define LINE	0 : 3   /* LINE signal from the backplane			*/
+#define PIXEL	0 : 4   /* PIXEL signal from the backplane			*/
+
+/* These arei ONLY the biases eventually commanded in states */
+#define VRstON_bias	9 : 22	/* Row Reset Bias */
+#define VRowOn		9 : 17  /* Activate Row */
+#define VRstOFF		9 : 21  /* Global Reset */
+
+/* These are the clock signals which come from the clock board    */
+#define FSYNC    	4 : 3  /*  Fast Sync Clock for column/fast shift register	        */
+#define PhiF1       	4 : 7  /*  Phase 1 input clock for column/fast shift register	    */
+#define PhiF2    	4 : 5  /*  Phase 2 input clock for column/fast shift register	    */
+#define SSYNC    	4 : 11  /*  Slow Sync Clock for row/slow shift register	            */
+#define PhiS1    	4 : 9  /*  Phase 1 input clock for row/slow shift register	        */
+#define PhiS2    	4 : 12  /*  Phase 2 input clock for row/slow shift register	        */
+#define PhiSOE    	4 : 10  /*  Odd/Even row select clock	                            */
+#define PhiRDesQ1     	4 : 2
+#define PhiRDesQ2     	4 : 6
+#define PhiRDesQ3     	4 : 4
+#define PhiRDesQ4     	4 : 8
+#define VRstON_ck	4 : 1
+
+#define PhiRDes [PhiRDesQ1,PhiRDesQ2,PhiRDesQ3,PhiRDesQ4]
+#define VRstOn [VRstON_ck]
