@@ -2,8 +2,8 @@
 
 
 /* Nominal values for the biases */
-#define VDDCL     -2.0  /* SWITCHED BIAS Drain clamp voltage for the column circuitery  */
-#define VGGCL      0.0     /* SWITCHED BIAS Gate of Clamp MOSFET */
+#define VDDCL      -2.0  /* SWITCHED BIAS Drain clamp voltage for the column circuitery  */
+#define VGGCL      0     /* SWITCHED BIAS Gate of Clamp MOSFET */
 #define VRSTOFF    -3.5  /* SWITCHED BIAS Global Row Reset bias       */
 #define VRSTON     0  /*             */
 
@@ -24,7 +24,7 @@
 
 #define VENPREAMP	5.0	
 #define VSSOUT		0.6
-#define VIDOFFSET	0.1
+#define VIDOFFSET	0.3
 #define VSPARE		0.0
 
 SLOT 9 lvbias {

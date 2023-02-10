@@ -18,7 +18,11 @@ param Expose=0
 param exptime=0
 param mode_UTR=1
 param mode_MCDS=0
+param mode_RXRV=0
+param mode_RXV=0
 param MCDS_sample=1
+param UTR_sample=1
+/*param Video_sample=1*/
 param SkippedRowsQuad=0
 param nRowsQuad=128
 param SkippedColumnsQuad=0
@@ -43,6 +47,7 @@ GOTO PowerUp();
 
 SEQUENCE SetupAladdin {
 GOTO WaitForExpose();
+SetupFrameStart();
 }
 
 /** ---------------------------------------------------------------------------
@@ -52,12 +57,12 @@ GOTO WaitForExpose();
 
 SEQUENCE WaitForExpose {
 abort--;
-SetupFrameStart();
+/*SetupFrameStart();*/
 if Expose AcqSequence();
 Reset_PRV_RESET_FLAG(1000); 
 GlobalReset();
 prv_idle++;
-GrabFrame();
+/*GrabFrame();*/
 prv_idle--;
 prv_reset_flag--;
 GOTO WaitForExpose();
@@ -66,18 +71,26 @@ GOTO WaitForExpose();
 SEQUENCE AcqSequence {
 if mode_UTR GOTO SequenceUTR();
 if mode_MCDS GOTO SequenceMCDS();
+if mode_RXRV GOTO SequenceRXRV();
+if mode_RXV GOTO SequenceRXV();
 GOTO WaitForExpose();
 }
 
 SEQUENCE SequenceUTR {
-if Expose GrabFrame();
-if Expose MilliSec(exptime);
-prv_reset_flag++; /* increments the counter after the first image */
+Increment_ExposeCounter(UTR_sample);
+GrabFrameUTR(UTR_sample);
+Expose--;
+Reset_PRV_RESET_FLAG(1000);
 GOTO WaitForExpose();
+}
+SEQUENCE GrabFrameUTR {
+GrabFrame();
+MilliSec(exptime);
+return;
 }
 
 SEQUENCE SequenceMCDS {
-Increment_ExposeCounter(MCDS_sample);
+Increment_ExposeCounter(MCDS_sample); /* We increment Expose here because it's going to be decremented by the same number in the next loop, total sum = 0 */
 GrabFrame(MCDS_sample);
 MilliSec(exptime);
 Increment_ExposeCounter(MCDS_sample);
@@ -87,8 +100,24 @@ Reset_PRV_RESET_FLAG(1000);
 GOTO WaitForExpose();
 }
 
-SEQUENCE GrabFrame {
+SEQUENCE SequenceRXRV {
+Increment_ExposeCounter(1);
+GrabFrameRXR(1);
 Expose--;
+GOTO WaitForExpose();
+return;
+}
+
+SEQUENCE SequenceRXV {
+Increment_ExposeCounter(1);
+GrabFrameRX(1);
+Expose--;
+GOTO WaitForExpose();
+return;
+}
+
+SEQUENCE GrabFrame {
+if !prv_idle Decrement_ExposeCounter();
 if !prv_idle wFrame();
 if !prv_reset_flag GlobalReset();
 SetupFrameStart();
@@ -98,6 +127,32 @@ if permanent_reset wVRstR();
 ReadRowQuad(nRowsQuad);                  /* Reads rows per group of 4. S2 O/E then S1 O/E */
 if permanent_reset wbVRstR();
 prv_reset_flag++;
+return;
+}
+
+SEQUENCE GrabFrameRX {
+if !prv_idle Decrement_ExposeCounter();
+if !prv_idle wFrame();
+SetupFrameStart();
+FrameStartPulse();
+SkipRow(SkippedRowsQuad);                /* Skips rows per group of 2 by pulsing S2 followed by S1  */
+if permanent_reset wVRstR();
+ReadRowQuadRX(nRowsQuad);                  /* Reads rows per group of 4. S2 O/E then S1 O/E */
+if permanent_reset wbVRstR();
+MilliSec(exptime);
+return;
+}
+
+SEQUENCE GrabFrameRXR {
+if !prv_idle Decrement_ExposeCounter();
+if !prv_idle wFrame();
+SetupFrameStart();
+FrameStartPulse();
+SkipRow(SkippedRowsQuad);                /* Skips rows per group of 2 by pulsing S2 followed by S1  */
+if permanent_reset wVRstR();
+ReadRowQuadRXR(nRowsQuad);                  /* Reads rows per group of 4. S2 O/E then S1 O/E */
+if permanent_reset wbVRstR();
+MilliSec(exptime);
 return;
 }
 
@@ -113,7 +168,51 @@ ReadRowPair(); /* reads two rows */
 return;
 }
 
+SEQUENCE ReadRowQuadRX {
+/* S2 Odd/Even */
+ConfigureS2();
+ReadRowPair();  /* read two rows */
+RollingResetPulse();
+/* S1 Odd/Even */
+ConfigureS1();
+ReadRowPair(); /* reads two rows */
+RollingResetPulse();
+return;
+}
+
+SEQUENCE ReadRowQuadRXR {
+/* S2 Odd/Even */
+ConfigureS2();
+ReadRowPair();  /* read two rows */
+RollingResetPulse();
+ReadRowPair();  /* read two rows */
+/* S1 Odd/Even */
+ConfigureS1();
+ReadRowPair(); /* reads two rows */
+RollingResetPulse();
+ReadRowPair();  /* read two rows */
+return;
+}
+
 SEQUENCE ReadRowPair {
+if !prv_idle wLine();                                   
+ActivateOddRow();
+InitRowRegister();
+ /*Aparently necessary*/
+SkipColumn(SkippedColumnsQuad);            /*  Skips by group of 4 pixels by pulsing F2 then F1 */
+/*if !idle wPixel();*/
+ReadOddPixel();
+ReadPixelPair(nPixelsPair);                /*  Reads the remaining odd pixels followed by even pixels */
+if !prv_idle wLine();
+ActivateEvenRow();                         /* ***** Read Even Row **** */
+InitRowRegister();
+SkipColumn(SkippedColumnsQuad);            /*  Skips by group of 4 pixels by pulsing F2 then F1 */
+ReadOddPixel();
+ReadPixelPair(nPixelsPair);                /*  Reads the remaining odd pixels followed by even pixels */
+return;
+}
+
+SEQUENCE ReadRowPairRXR {
 if !prv_idle wLine();                                   
 ActivateOddRow();
 InitRowRegister();

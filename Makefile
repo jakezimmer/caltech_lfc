@@ -20,7 +20,7 @@
 # -----------------------------------------------------------------------------
 #
 
-GPP       = /usr/local/bin/gpp
+GPP       = /usr/bin/gpp
 WDLPATH   = $(HOME)/Software/wdl
 ACFPATH   = $(HOME)/Software/acf/nirc2
 
