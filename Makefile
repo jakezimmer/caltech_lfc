@@ -22,7 +22,7 @@
 
 GPP       = /usr/bin/gpp
 WDLPATH   = $(HOME)/Software/wdl
-ACFPATH   = $(HOME)/Software/acf/nirc2
+ACFPATH   = $(HOME)/Software/DeimosLFCfirmware
 
 PLOT      = False # True   # show waveform plots by default, True | False
 GFLAGS    = +c "/*" "*/" +c "//" "\n" +c "\\\n" ""

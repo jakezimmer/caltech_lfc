@@ -1,0 +1,93 @@
+/* -*- C -*- */
+/** ---------------------------------------------------------------------------
+ * @file     DeimosLFC
+ * @brief    sequence file for SITe imager
+ * @author   Jake Zimmer
+ * @date     2023-05-24 Initial creation
+ * @modified 
+ *
+ */
+
+/** ---------------------------------------------------------------------------
+ * parameter definitions
+ * syntax: param paramname=value
+*/
+
+param Expose=0
+param exptime=0
+param test_mode=0
+
+/** ---------------------------------------------------------------------------
+ * @fn     SetupSITe
+ * @brief  This executes on start-up and sets levels to initialize ROIC array.
+ *
+ */
+SEQUENCE Main {
+if Expose GOTO GrabFrame();
+if test_mode GOTO TestMode(); 
+GOTO Main();
+}
+
+/**
+ * @fn     TestMode
+ * @brief  This tests each phase sequentially
+*/
+SEQUENCE TestMode {
+  wFrame();
+  wLine();
+  wPixel();
+  TestPhase(100);
+  return;
+}
+
+/** ---------------------------------------------------------------------------
+ * @fn     GrabFrame
+ * @brief  Grab a frame of data
+ */
+SEQUENCE GrabFrame {
+Expose--;
+ParallelShiftNonMPPFlush(_LINECOUNT);
+Sec(exptime);
+wFrame();
+GrabLine(_LINECOUNT);
+return;
+}
+
+/** ---------------------------------------------------------------------------
+ * @fn     GrabLine
+ * @brief  Grab a line of data
+ */
+SEQUENCE GrabLine {
+wLine();
+ClampAC();
+ParallelShiftNonMPP();
+GrabPixel(_PIXELCOUNT);
+return;
+}
+
+/** ---------------------------------------------------------------------------
+ * @fn     GrabPixel
+ * @brief  Grab a pixel of data
+ */
+SEQUENCE GrabPixel {
+wPixel();
+SerialShiftPixelB();
+wDelay1us();
+return;
+}
+
+/** ----------------------------------------------------------
+ * MISC SEQUENCES
+ *
+ */
+
+SEQUENCE MilliSec {
+  wDelay1ms();
+  return;
+}
+SEQUENCE Sec {
+MilliSec(1000);
+return;
+}
+
+

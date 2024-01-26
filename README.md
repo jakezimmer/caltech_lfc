@@ -1,1 +1,9 @@
-# nirc2
+# DeimosLFC
+
+Tap order
+AM39L,1,100
+AM40L,1,100
+AM41L,1,100
+AM42L,1,100
+AM43L,1,100
+AM44L,1,100
