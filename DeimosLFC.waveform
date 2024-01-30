@@ -190,11 +190,11 @@ WAVEFORM ParallelShiftMPP {
 /* Non-MPP Parallel Shift */
 WAVEFORM ParallelShiftNonMPP {
 0:		SET P1 TO ParallelLo,SLOW;
-.+Tp:	SET P3 TO Parallel3Hi,SLOW;
-.+Tp:	SET P2 TO ParallelLo,SLOW;
+.+Tp:	SET P2 TO Parallel3Hi,SLOW;
+.+Tp:	SET P3 TO ParallelLo,SLOW;
 .+Tp:	SET P1 TO ParallelHi,SLOW;
-.+Tp:	SET P3 TO Parallel3Lo,SLOW;
-.+Tp:	SET P2 TO ParallelHi,SLOW;
+.+Tp:	SET P2 TO Parallel3Lo,SLOW;
+.+Tp:	SET P3 TO ParallelHi,SLOW;
 .+Tp:	RETURN;
 }
 /* Non-MPP Parallel Flush */

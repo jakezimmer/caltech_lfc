@@ -46,7 +46,7 @@ SEQUENCE TestMode {
  */
 SEQUENCE GrabFrame {
 Expose--;
-ParallelShiftNonMPPFlush(_LINECOUNT);
+ParallelShiftNonMPP(_LINECOUNT);
 Sec(exptime);
 wFrame();
 GrabLine(_LINECOUNT);
