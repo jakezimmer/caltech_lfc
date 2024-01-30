@@ -23,8 +23,8 @@ param test_mode=0
  *
  */
 SEQUENCE Main {
-if Expose GOTO GrabFrame();
-if test_mode GOTO TestMode(); 
+if Expose GrabFrame();
+/* if test_mode GOTO TestMode(); */
 GOTO Main();
 }
 
@@ -71,7 +71,7 @@ return;
  */
 SEQUENCE GrabPixel {
 wPixel();
-SerialShiftPixelB();
+SerialShiftPixelA_copy2();
 wDelay1us();
 return;
 }

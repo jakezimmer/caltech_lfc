@@ -70,13 +70,14 @@ WAVEFORM RawPixel {
 WAVEFORM wDelay1us {
  1us:		   RETURN;
 }
-WAVEFORM wDelay10us {
- 10us:		   RETURN;
-}
+// WAVEFORM wDelay10us {
+//  10us:		   RETURN;
+// }
 
 
-WAVEFORM wDelay10ns {
-}
+// WAVEFORM wDelay10ns {
+//  10ns:		   RETURN;
+// }
 
 WAVEFORM wDelay1ms {
  1ms:               RETURN;
@@ -92,6 +93,7 @@ WAVEFORM wSampleDelay {
 /* Shift out to A side */
 WAVEFORM SerialShiftPixelA {
 0: 		SET RG TO PINDHi;
+.+Ts:	SET RG TO PINDHi;
 .+Ts:	SET RG TO PINDLo;
 .+Ts:	SET SW TO PINDHi;
 		SET S2 TO SerialHi,FAST;
@@ -108,6 +110,7 @@ WAVEFORM SerialShiftPixelA {
 
 WAVEFORM SerialShiftPixelB {
 0: 		SET RG TO PINDHi;
+.+Ts:	SET RG TO PINDHi;
 .+Ts:	SET RG TO PINDLo;
 .+Ts:	SET SW TO PINDHi;
 		SET S3 TO SerialHi,FAST;
@@ -141,16 +144,35 @@ WAVEFORM SerialShiftPixelA_copy {
 WAVEFORM SerialShiftPixelB_copy {
 0: 		SET S3 TO SerialHi,FAST;
 		SET RG TO PINDHi;
+		SET AC_CLAMP TO LVDSHi;
 .+Ts: 	SET S1 TO SerialLo,FAST;
 .+Ts:	SET S2 TO SerialHi,FAST;
+        SET AC_CLAMP TO LVDSLo;
 		SET SW TO PINDHi;
 		SET RG TO PINDLo;
 .+Ts:	SET S3 TO SerialLo,FAST;
 .+Ts:	SET S1 TO SerialHi,FAST;
 .+Ts:	SET S2 TO SerialLo,FAST;
 		SET SW TO PINDLo;
-.+Tclamp:			SET AC_CLAMP TO LVDSHi;
-.+Tclamp:	SET AC_CLAMP TO LVDSLo;
+.+Ts:	SET SW TO PINDLo;
+.+Ts:	return;
+}
+
+/* Shift out to A side */
+WAVEFORM SerialShiftPixelA_copy2 {
+0: 		SET S2 TO SerialHi,FAST;
+		SET RG TO PINDHi;
+.+Ts: 	SET S1 TO SerialLo,FAST;
+.+Ts:	SET S3 TO SerialHi,FAST;
+		SET SW TO PINDHi;
+		SET RG TO PINDLo;
+.+Ts:	SET S2 TO SerialLo,FAST;
+		SET AC_CLAMP TO LVDSHi;
+.+Ts:	SET S1 TO SerialHi,FAST;
+        SET AC_CLAMP TO LVDSLo;
+.+Ts:	SET S3 TO SerialLo,FAST;
+		SET SW TO PINDLo;
+.+Ts:	SET SW TO PINDLo;
 .+Ts:	return;
 }
 
