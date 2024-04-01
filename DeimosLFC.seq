@@ -24,6 +24,7 @@ param test_mode=0
  */
 SEQUENCE Main {
 if Expose GrabFrame();
+if test_mode TestRG();
 /* if test_mode GOTO TestMode(); */
 GOTO Main();
 }
@@ -37,6 +38,18 @@ SEQUENCE TestMode {
   wLine();
   wPixel();
   TestPhase(100);
+  return;
+}
+
+/**
+ * @fn     TestRG
+ * @brief  This tests the RG phase
+ */
+SEQUENCE TestRG {
+  OnlyRG_Hi();
+  Sec(5);
+  OnlyRG_Lo();
+  Sec(5);
   return;
 }
 
@@ -71,7 +84,7 @@ return;
  */
 SEQUENCE GrabPixel {
 wPixel();
-SerialShiftPixelA_copy2();
+SerialShiftPixelA();
 wDelay1us();
 return;
 }
