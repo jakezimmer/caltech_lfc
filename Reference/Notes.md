@@ -111,4 +111,17 @@ Parallel Options: PA, PB, PC
 |        0 |        5 |     14 |       0.345 |       0.595 |       0.035 |
 |        0 |        5 |     16 |       0.045 |       0.055 |        0.03 |
 
-
+## Roger's suggestions 2024
+- No value in turning RG on harder
+- Only want to go low enough that you convincingly always turn off
+- Just want to be right around the threshold 2v either side (def no more than 5v)
+- Output impedance of transistor is around 3-5k
+- Datasheet is unclear about if front side or backside on page 7
+- Number of prescan pixels is often oboe
+- Some of the weird behavior might be from the OFD which is the typo on the datasheet voltage
+- Can probe the parallel traces by stimulating one and looking for another two (disconnected) traces which bounce with it
+- Also if the parallel rises too fast it might not be a parallel or might be disconnected
+- Weird corner brightness with sharp cutoff will be too much charge accumulating
+- https://instrumentation.obs.carnegiescience.edu/ccd/imacs/ccd.html
+- Test: turn off the parallel clocks and just read out the serial register. If getting signal, gotta check that OFD isnt bleeding.
+- Test: what if the substrate is not connected. Probably fine because of output transistor.
