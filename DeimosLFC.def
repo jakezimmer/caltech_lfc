@@ -31,7 +31,7 @@
 #define _RAW_ENDLINE              10     /* last line of raw data, 0-65535 */
 #define _RAW_STARTPIXEL            0
 #define _RAW_SAMPLES           25600
-#define _RAW_SELECT               10 /* AD channel for raw data capture, 0-15 */
+#define _RAW_SELECT               11 /* AD channel for raw data capture, 0-15 */
 
 #define _FIRST_RESET_SAMPLE       1450
 #defeval _LAST_RESET_SAMPLE       1500

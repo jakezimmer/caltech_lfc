@@ -16,6 +16,7 @@
 param Expose=0
 param exptime=0
 param test_mode=0
+param longexposure=0
 
 /** ---------------------------------------------------------------------------
  * @fn     SetupSITe
@@ -24,8 +25,8 @@ param test_mode=0
  */
 SEQUENCE Main {
 if Expose GrabFrame();
-if test_mode TestRG();
-/* if test_mode GOTO TestMode(); */
+if test_mode TestPhase();
+// if test_mode GOTO TestMode();
 GOTO Main();
 }
 
@@ -50,6 +51,20 @@ SEQUENCE TestRG {
   Sec(5);
   OnlyRG_Lo();
   Sec(5);
+  return;
+}
+
+/**
+ * @fn     TestSW
+ * @brief  This tests the SW phase
+ */
+SEQUENCE TestSW {
+  OnlySW_Hi();
+  Sec(5);
+  TestRG();
+  OnlySW_Lo();
+  Sec(5);
+  TestRG();
   return;
 }
 

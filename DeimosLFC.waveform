@@ -131,18 +131,19 @@ WAVEFORM SerialShiftPixelB {
 WAVEFORM SerialShiftPixelA_copy {
 0: 		SET S2 TO SerialHi,FAST;
 		SET RG TO PINDHi;
+		SET AC_CLAMP TO LVDSHi;
 .+Ts: 	SET S1 TO SerialLo,FAST;
 .+Ts:	SET S3 TO SerialHi,FAST;
 		SET SW TO PINDHi;
 		SET RG TO PINDLo;
 .+Ts:	SET S2 TO SerialLo,FAST;
 .+Ts:	SET S1 TO SerialHi,FAST;
+		SET AC_CLAMP TO LVDSLo;
 .+Ts:	SET S3 TO SerialLo,FAST;
 		SET SW TO PINDLo;
-.+Tclamp:			SET AC_CLAMP TO LVDSHi;
-.+Tclamp:	SET AC_CLAMP TO LVDSLo;
 .+Ts:	return;
 }
+
 /* Shift out to B side */
 WAVEFORM SerialShiftPixelB_copy {
 0: 		SET S3 TO SerialHi,FAST;
@@ -244,6 +245,15 @@ WAVEFORM OnlyRG_Lo {
 .+Ts:		return;
 }
 
+WAVEFORM OnlySW_Hi {
+0:		SET SW TO PINDHi;
+.+Ts:		return;
+}
+
+WAVEFORM OnlySW_Lo {
+0:		SET SW TO PINDLo;
+.+Ts:		return;
+}
 
 
 /* MPP Parallel Shift */
@@ -295,13 +305,13 @@ WAVEFORM TestPhase {
 .+Ts:		SET S3 TO SerialLo,FAST;
 .+Ts:		SET SW TO PINDHi;
 .+Ts:		SET SW TO PINDLo;
-.+Tp:		SET P1 TO ParallelHi,FAST;
-.+Tp:		SET P1 TO ParallelLo,FAST;
-.+Tp:		SET P2 TO ParallelHi,FAST;
-.+Tp:		SET P2 TO ParallelLo,FAST;
-.+Tp:		SET P3 TO Parallel3Hi,FAST;
-.+Tp:		SET P3 TO Parallel3Lo,FAST;
-.+Tp:		SET AC_CLAMP TO LVDSHi;
+.+Ts:		SET P1 TO ParallelHi,FAST;
+.+Ts:		SET P1 TO ParallelLo,FAST;
+.+Ts:		SET P2 TO ParallelHi,FAST;
+.+Ts:		SET P2 TO ParallelLo,FAST;
+.+Ts:		SET P3 TO Parallel3Hi,FAST;
+.+Ts:		SET P3 TO Parallel3Lo,FAST;
+.+Ts:		SET AC_CLAMP TO LVDSHi;
 .+Tclamp:	SET AC_CLAMP TO LVDSLo;
 .+Tp:		RETURN;
 }

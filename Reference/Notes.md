@@ -111,4 +111,6 @@ Parallel Options: PA, PB, PC
 |        0 |        5 |     14 |       0.345 |       0.595 |       0.035 |
 |        0 |        5 |     16 |       0.045 |       0.055 |        0.03 |
 
+# Latest Commit
 
+This commit will attempt to evaluate all combinations of the 
