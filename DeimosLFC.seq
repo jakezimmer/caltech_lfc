@@ -74,7 +74,7 @@ SEQUENCE TestSW {
  */
 SEQUENCE GrabFrame {
 Expose--;
-ParallelShiftNonMPP(_LINECOUNT);
+ParallelShiftNonMPP(4096); //TODO SWAP BACK TO _LINECOUNT
 Sec(exptime);
 wFrame();
 GrabLine(_LINECOUNT);

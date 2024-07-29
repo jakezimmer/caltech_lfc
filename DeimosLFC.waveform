@@ -128,111 +128,7 @@ WAVEFORM SerialShiftPixelB {
 .+Ts:	return;
 }
 
-WAVEFORM SerialShiftPixelA_copy {
-0: 		SET S2 TO SerialHi,FAST;
-		SET RG TO PINDHi;
-		SET AC_CLAMP TO LVDSHi;
-.+Ts: 	SET S1 TO SerialLo,FAST;
-.+Ts:	SET S3 TO SerialHi,FAST;
-		SET SW TO PINDHi;
-		SET RG TO PINDLo;
-.+Ts:	SET S2 TO SerialLo,FAST;
-.+Ts:	SET S1 TO SerialHi,FAST;
-		SET AC_CLAMP TO LVDSLo;
-.+Ts:	SET S3 TO SerialLo,FAST;
-		SET SW TO PINDLo;
-.+Ts:	return;
-}
 
-/* Shift out to B side */
-WAVEFORM SerialShiftPixelB_copy {
-0: 		SET S3 TO SerialHi,FAST;
-		SET RG TO PINDHi;
-		SET AC_CLAMP TO LVDSHi;
-.+Ts: 	SET S1 TO SerialLo,FAST;
-.+Ts:	SET S2 TO SerialHi,FAST;
-        SET AC_CLAMP TO LVDSLo;
-		SET SW TO PINDHi;
-		SET RG TO PINDLo;
-.+Ts:	SET S3 TO SerialLo,FAST;
-.+Ts:	SET S1 TO SerialHi,FAST;
-.+Ts:	SET S2 TO SerialLo,FAST;
-		SET SW TO PINDLo;
-.+Ts:	SET SW TO PINDLo;
-.+Ts:	return;
-}
-
-/* Shift out to A side */
-WAVEFORM SerialShiftPixelA_copy2 {
-0: 		SET S2 TO SerialHi,FAST;
-		SET RG TO PINDHi;
-.+Ts: 	SET S1 TO SerialLo,FAST;
-.+Ts:	SET S3 TO SerialHi,FAST;
-		SET SW TO PINDHi;
-		SET RG TO PINDLo;
-.+Ts:	SET S2 TO SerialLo,FAST;
-		SET AC_CLAMP TO LVDSHi;
-.+Ts:	SET S1 TO SerialHi,FAST;
-        SET AC_CLAMP TO LVDSLo;
-.+Ts:	SET S3 TO SerialLo,FAST;
-		SET SW TO PINDLo;
-.+Ts:	SET SW TO PINDLo;
-.+Ts:	return;
-}
-
-/* Shift out to B side */
-WAVEFORM SerialShiftPixelB_copy2 {
-0: 		SET S3 TO SerialHi,FAST;
-		SET RG TO PINDHi;
-.+Ts: 	SET S1 TO SerialLo,FAST;
-.+Ts:	SET S2 TO SerialHi,FAST;
-		SET SW TO PINDHi;
-		SET RG TO PINDLo;
-.+Ts:	SET S3 TO SerialLo,FAST;
-		SET AC_CLAMP TO LVDSHi;
-.+Ts:	SET S1 TO SerialHi,FAST;
-        SET AC_CLAMP TO LVDSLo;
-.+Ts:	SET S2 TO SerialLo,FAST;
-		SET SW TO PINDLo;
-.+Ts:	SET SW TO PINDLo;
-.+Ts:	return;
-}
-
-/* Shift out to Unknown side */
-WAVEFORM SerialShiftPixelE_copy2 {
-0: 		SET SB TO SerialHi,FAST;
-		SET RG TO PINDHi;
-.+Ts: 	SET SA TO SerialLo,FAST;
-.+Ts:	SET SC TO SerialHi,FAST;
-		SET SW TO PINDHi;
-		SET RG TO PINDLo;
-.+Ts:	SET SB TO SerialLo,FAST;
-		SET AC_CLAMP TO LVDSHi;
-.+Ts:	SET SA TO SerialHi,FAST;
-        SET AC_CLAMP TO LVDSLo;
-.+Ts:	SET SC TO SerialLo,FAST;
-		SET SW TO PINDLo;
-.+Ts:	SET SW TO PINDLo;
-.+Ts:	return;
-}
-
-/* Shift out to Unknown side */
-WAVEFORM SerialShiftPixelE_copy3 {
-0: 		SET S2 TO SerialHi,FAST;
-		SET RG TO PINDHi;
-.+Ts: 	SET S1 TO SerialLo,FAST;
-.+Ts:	SET S3 TO SerialHi,FAST;
-		SET SW TO PINDHi;
-		SET RG TO PINDLo;
-.+Ts:	SET S2 TO SerialLo,FAST;
-		SET AC_CLAMP TO LVDSHi;
-.+Ts:	SET S1 TO SerialHi,FAST;
-        SET AC_CLAMP TO LVDSLo;
-.+Ts:	SET S3 TO SerialLo,FAST;
-		SET SW TO PINDLo;
-.+Ts:	SET SW TO PINDLo;
-.+Ts:	return;
-}
 
 /* Only RG */
 WAVEFORM OnlyRG_Hi {
@@ -267,14 +163,21 @@ WAVEFORM ParallelShiftMPP {
 .+Tp:	RETURN;
 }
 
+//1,3,2,1,3,2x (maybe, produces patterning 31)
+//1,2,3,1,2,3x (maybe, produces patterning 42)
+//2,1,3,2,1,3x (no pattern)
+//2,3,1,2,3,1x (maybe, produces patterning 37)
+//3,2,1,3,2,1x (very little pattern, also no parrallel bloom at bottom)
+//3,1,2,3,1,2x (maybe, produces patterning 36)
+
 /* Non-MPP Parallel Shift */
 WAVEFORM ParallelShiftNonMPP {
 0:		SET P1 TO ParallelLo,SLOW;
-.+Tp:	SET P3 TO Parallel3Hi,SLOW;
-.+Tp:	SET P2 TO ParallelLo,SLOW;
+.+Tp:	SET P2 TO Parallel3Hi,SLOW;
+.+Tp:	SET P3 TO ParallelLo,SLOW;
 .+Tp:	SET P1 TO ParallelHi,SLOW;
-.+Tp:	SET P3 TO Parallel3Lo,SLOW;
-.+Tp:	SET P2 TO ParallelHi,SLOW;
+.+Tp:	SET P2 TO Parallel3Lo,SLOW;
+.+Tp:	SET P3 TO ParallelHi,SLOW;
 .+Tp:	RETURN;
 }
 /* Non-MPP Parallel Flush */

@@ -26,18 +26,18 @@
 #define _ARCHON_FRAMEBUFS          0     /* 0=3x512MB, 1=2x768MB, I.E. "BIGBUF" */
 
 /* We won't begin with raw stuff, so leave this be for now */
-#define _RAW_ENABLE                0 /* 0=no, 1=yes */
+#define _RAW_ENABLE                1 /* 0=no, 1=yes */
 #define _RAW_STARTLINE             1     /* first line of raw data, 0-65535 */
 #define _RAW_ENDLINE              10     /* last line of raw data, 0-65535 */
 #define _RAW_STARTPIXEL            0
 #define _RAW_SAMPLES           25600
-#define _RAW_SELECT               11 /* AD channel for raw data capture, 0-15 */
+#define _RAW_SELECT               10 /* AD channel for raw data capture, 0-15 */
 
-#define _FIRST_RESET_SAMPLE       1450
-#defeval _LAST_RESET_SAMPLE       1500
-#defeval _FIRST_VIDEO_SAMPLE      2100
-#define _LAST_VIDEO_SAMPLE        2150
-#define _LINECOUNT                  4096
+#define _FIRST_RESET_SAMPLE       3150
+#defeval _LAST_RESET_SAMPLE       3250
+#defeval _FIRST_VIDEO_SAMPLE      3450
+#define _LAST_VIDEO_SAMPLE        3650
+#define _LINECOUNT                  1000
 #define _PIXELCOUNT                 2118
 
 
@@ -48,8 +48,8 @@
 #define SerialLo        -5
 #define SerialHi        3.8
 
-#define ParallelLo      -7.8
-#define ParallelHi      3.3
+#define ParallelLo      -10
+#define ParallelHi      2
 
 #define Parallel3Lo     -7.8
 #define Parallel3Hi     5.8
@@ -60,5 +60,5 @@
 #define PINDHi          0
 #define PINDLo          1
 
-#define ClampLo         0
-#define ClampHi         0
+//#define ClampLo         0
+//#define ClampHi         1
