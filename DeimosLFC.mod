@@ -6,9 +6,9 @@
 #define VOPAMPPD    5.0
 #define VLG         -3.4
 #define VRG_HI      12
-#define VRG_LO      1
-#define VSW_HI      6
-#define VSW_LO      -5
+#define VRG_LO      4
+#define VSW_HI      4
+#define VSW_LO      -4
 #define VRD         14
 #define VOFD        14.9
 #define VDD         24.1

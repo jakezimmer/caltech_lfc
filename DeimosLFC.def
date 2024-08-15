@@ -33,11 +33,11 @@
 #define _RAW_SAMPLES           25600
 #define _RAW_SELECT               10 /* AD channel for raw data capture, 0-15 */
 
-#define _FIRST_RESET_SAMPLE       3150
-#defeval _LAST_RESET_SAMPLE       3250
-#defeval _FIRST_VIDEO_SAMPLE      3450
-#define _LAST_VIDEO_SAMPLE        3650
-#define _LINECOUNT                  1000
+#define _FIRST_RESET_SAMPLE       3000
+#defeval _LAST_RESET_SAMPLE       4000
+#defeval _FIRST_VIDEO_SAMPLE      6000
+#define _LAST_VIDEO_SAMPLE        7000
+#define _LINECOUNT                  4096
 #define _PIXELCOUNT                 2118
 
 

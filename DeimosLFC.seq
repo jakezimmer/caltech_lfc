@@ -99,7 +99,7 @@ return;
  */
 SEQUENCE GrabPixel {
 wPixel();
-SerialShiftPixelA();
+SerialShiftPixelA_OLD();
 wDelay1us();
 return;
 }
