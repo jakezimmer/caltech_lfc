@@ -49,11 +49,11 @@
 
 /* Timing specific to SITe waveform */
 // TODO define specific for SITe
-#define Ts 	#eval 3 us /* Serial clock spacing */
+#define Ts 	#eval 1 us /* Serial clock spacing */
 #define Tp 	#eval 1000 us /* Parallel clock spacing */
 #define TpF 	#eval 1 us /* Parallel clock spacing */
-#define Tsam 	#eval 20 us /* Time delay before sampling the serial signal */
-#define Tclamp 	#eval 20 us /* Time delay for clamping the serial signal */
+#define Tsam 	#eval 5 us /* Time delay before sampling the serial signal */
+#define Tclamp 	#eval 5 us /* Time delay for clamping the serial signal */
 #define Trtn 	#eval 3 us /* Time delay for returning
 /* Logical state defines */
 #define High		   1
